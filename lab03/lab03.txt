@@ -1,0 +1,43 @@
+newowner@MacBookPro database % psql -U newowner -d postgres
+psql (14.19 (Homebrew))
+Type "help" for help.
+
+postgres=# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | newowner | UTF8     | C       | C     | 
+ template0 | newowner | UTF8     | C       | C     | =c/newowner          +
+           |          |          |         |       | newowner=CTc/newowner
+ template1 | newowner | UTF8     | C       | C     | =c/newowner          +
+           |          |          |         |       | newowner=CTc/newowner
+(3 rows)
+
+postgres=# CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    age INT
+);
+CREATE TABLE
+postgres=# INSERT INTO students (name, age) VALUES ('Alice', 21), ('Bob', 23);
+INSERT 0 2
+postgres=# SELECT * FROM students;
+ id | name  | age 
+----+-------+-----
+  1 | Alice |  21
+  2 | Bob   |  23
+(2 rows)
+
+postgres=# \l
+                             List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ postgres  | newowner | UTF8     | C       | C     | 
+ template0 | newowner | UTF8     | C       | C     | =c/newowner          +
+           |          |          |         |       | newowner=CTc/newowner
+ template1 | newowner | UTF8     | C       | C     | =c/newowner          +
+           |          |          |         |       | newowner=CTc/newowner
+(3 rows)
+
+postgres=# DROP TABLE students;
+DROP TABLE
