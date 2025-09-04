@@ -1,0 +1,11 @@
+newowner@MacBookPro database % psql -U newowner -d postgres
+psql (14.19 (Homebrew))
+Type "help" for help.
+
+postgres=# DROP DATABASE university;
+ERROR:  database "university" does not exist
+postgres=# CREATE DATABASE university;
+CREATE DATABASE
+university-# \c university
+You are now connected to database "university" as user "newowner".
+university-# psql -d students -U newowner
