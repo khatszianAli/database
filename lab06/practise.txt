@@ -1,0 +1,38 @@
+postgres=# CREATE TABLE students(
+student_id SERIAL PRIMaRY KEY,
+firts_name VARCHAR(50) NOT NULL,
+last_name VARCHAR(50) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+faculty VARCHAR(100));
+CREATE TABLE
+postgres=# DROP TABLE IF EXISTS test_table;
+NOTICE:  table "test_table" does not exist, skipping
+DROP TABLE
+postgres=# ALTER TABLE students
+postgres-# ADD COLUMN date_of_birth DATE;
+ALTER TABLE
+postgres=# ALTER TABLE students
+DROP COLUMN faculty;
+ALTER TABLE
+postgres=# ALTER TABLE students
+postgres=# ALTER TABLE students
+postgres=# ALTER TABLE students
+ALTER COLUMN firts_name TYPE TEXT;
+ALTER TABLE
+postgres=# ALTER TABLE students
+ADD CONSTRAINT unique_student_email UNIQUE(enail);
+ERROR:  column "enail" named in key does not exist
+postgres=# ALTER TABLE students
+ADD CONSTRAINT unique_student_email UNIQUE(email);
+ALTER TABLE
+postgres=# ALTER TABLE students
+RENAME COLUMN firts_name to first_name;
+ALTER TABLE
+postgres=# ALTER TABLE students
+postgres=# CREATE TEMP TABLE new_students (
+postgres(# student_id SERIAL PRIMaRY KEY,
+firts_name VARCHAR(50) NOT NULL,
+last_name VARCHAR(50) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+faculty VARCHAR(100));
+CREATE TABLE
