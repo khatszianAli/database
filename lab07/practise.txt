@@ -1,0 +1,257 @@
+postgres=# CREATE TABLE students(
+postgres(# student_id INTEGER PRIMARY KEY,
+postgres(# student_name VARCHAR(100),
+postgres(# student_email VARCHAR(150)
+postgres(# );
+CREATE TABLE
+postgres=# ls
+postgres-# ;
+ERROR:  syntax error at or near "ls"
+LINE 1: ls
+        ^
+postgres=# \l
+                             List of databases
+    Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+------------+----------+----------+---------+-------+-----------------------
+ postgres   | newowner | UTF8     | C       | C     | 
+ template0  | newowner | UTF8     | C       | C     | =c/newowner          +
+            |          |          |         |       | newowner=CTc/newowner
+ template1  | newowner | UTF8     | C       | C     | =c/newowner          +
+            |          |          |         |       | newowner=CTc/newowner
+ university | newowner | UTF8     | C       | C     | 
+(4 rows)
+
+postgres=# \c postgres
+You are now connected to database "postgres" as user "newowner".
+postgres=# \l
+                             List of databases
+    Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+------------+----------+----------+---------+-------+-----------------------
+ postgres   | newowner | UTF8     | C       | C     | 
+ template0  | newowner | UTF8     | C       | C     | =c/newowner          +
+            |          |          |         |       | newowner=CTc/newowner
+ template1  | newowner | UTF8     | C       | C     | =c/newowner          +
+            |          |          |         |       | newowner=CTc/newowner
+ university | newowner | UTF8     | C       | C     | 
+(4 rows)
+
+postgres=# \dt
+                List of relations
+ Schema |        Name         | Type  |  Owner   
+--------+---------------------+-------+----------
+ public | students            | table | newowner
+ public | university_students | table | newowner
+(2 rows)
+
+postgres=# \d students
+                         Table "public.students"
+    Column     |          Type          | Collation | Nullable | Default 
+---------------+------------------------+-----------+----------+---------
+ student_id    | integer                |           | not null | 
+ student_name  | character varying(100) |           |          | 
+ student_email | character varying(150) |           |          | 
+Indexes:
+    "students_pkey1" PRIMARY KEY, btree (student_id)
+
+postgres=# drop students
+postgres-# ;
+ERROR:  syntax error at or near "students"
+LINE 1: drop students
+             ^
+postgres=# DROP TABLE students
+postgres-# ;
+DROP TABLE
+postgres=# \d
+                   List of relations
+ Schema |          Name           |   Type   |  Owner   
+--------+-------------------------+----------+----------
+ public | students_student_id_seq | sequence | newowner
+ public | university_students     | table    | newowner
+(2 rows)
+
+postgres=# CREATE TABLE students (
+    student_id INTEGER,
+    name VARCHAR(100),
+    email VARCHAR(150),
+    PRIMARY KEY (student_id)
+);
+CREATE TABLE
+postgres=# \d
+                   List of relations
+ Schema |          Name           |   Type   |  Owner   
+--------+-------------------------+----------+----------
+ public | students                | table    | newowner
+ public | students_student_id_seq | sequence | newowner
+ public | university_students     | table    | newowner
+(3 rows)
+
+postgres=# \d students
+                       Table "public.students"
+   Column   |          Type          | Collation | Nullable | Default 
+------------+------------------------+-----------+----------+---------
+ student_id | integer                |           | not null | 
+ name       | character varying(100) |           |          | 
+ email      | character varying(150) |           |          | 
+Indexes:
+    "students_pkey1" PRIMARY KEY, btree (student_id)
+
+postgres=# DROP TABLE students
+;
+DROP TABLE
+postgres=# CREATE TABLE students (
+    student_id INTEGER,
+    name VARCHAR(100),
+    email VARCHAR(150),
+    CONSTRAINT pk_students PRIMARY KEY (student_id)
+);
+CREATE TABLE
+postgres=# \d students
+                       Table "public.students"
+   Column   |          Type          | Collation | Nullable | Default 
+------------+------------------------+-----------+----------+---------
+ student_id | integer                |           | not null | 
+ name       | character varying(100) |           |          | 
+ email      | character varying(150) |           |          | 
+Indexes:
+    "pk_students" PRIMARY KEY, btree (student_id)
+
+postgres=# DROP TABLE students
+;
+DROP TABLE
+postgres=# CREATE TABLE students (
+    student_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE,
+    faculty VARCHAR(50)
+);
+CREATE TABLE
+postgres=# INSERT INTO students (name, email, faculty) VALUES
+('Alice Johnson', 'alice@alatoo.edu.kg', 'Computer Science'),
+('Bob Smith', 'bob@alatoo.edu.kg', 'Mathematics'),
+('Carol Davis', 'carol@alatoo.edu.kg', 'Computer Science');
+INSERT 0 3
+postgres=# \d students
+                                          Table "public.students"
+   Column   |          Type          | Collation | Nullable |                    Default                    
+------------+------------------------+-----------+----------+-----------------------------------------------
+ student_id | integer                |           | not null | nextval('students_student_id_seq1'::regclass)
+ name       | character varying(100) |           | not null | 
+ email      | character varying(150) |           |          | 
+ faculty    | character varying(50)  |           |          | 
+Indexes:
+    "students_pkey1" PRIMARY KEY, btree (student_id)
+    "students_email_key1" UNIQUE CONSTRAINT, btree (email)
+
+postgres=# SELECT * FROM students;
+ student_id |     name      |        email        |     faculty      
+------------+---------------+---------------------+------------------
+          1 | Alice Johnson | alice@alatoo.edu.kg | Computer Science
+          2 | Bob Smith     | bob@alatoo.edu.kg   | Mathematics
+          3 | Carol Davis   | carol@alatoo.edu.kg | Computer Science
+(3 rows)
+
+postgres=# CREATE TABLE course_enrollments (
+    student_id INTEGER,
+    course_id INTEGER,
+    semester VARCHAR(20),
+    enrollment_date DATE DEFAULT CURRENT_DATE,
+    grade CHAR(2),
+    PRIMARY KEY (student_id, course_id, semester)
+);
+CREATE TABLE
+postgres=# (1, 101, '2024-Spring', 'A'),
+(1, 102, '2024-Spring', 'B+'),
+(2, 101, '2024-Spring', 'A-'),
+(1, 101, '2024-Fall', 'A+');
+ERROR:  syntax error at or near "1"
+LINE 1: (1, 101, '2024-Spring', 'A'),
+         ^
+postgres=# INSERT INTO course_enrollments (student_id, course_id, semester, grade) VALUES
+(1, 101, '2024-Spring', 'A'),
+(1, 102, '2024-Spring', 'B+'),
+(2, 101, '2024-Spring', 'A-'),
+(1, 101, '2024-Fall', 'A+');
+INSERT 0 4
+postgres=# \d course_enrollments
+                       Table "public.course_enrollments"
+     Column      |         Type          | Collation | Nullable |   Default    
+-----------------+-----------------------+-----------+----------+--------------
+ student_id      | integer               |           | not null | 
+ course_id       | integer               |           | not null | 
+ semester        | character varying(20) |           | not null | 
+ enrollment_date | date                  |           |          | CURRENT_DATE
+ grade           | character(2)          |           |          | 
+Indexes:
+    "course_enrollments_pkey" PRIMARY KEY, btree (student_id, course_id, semester)
+
+postgres=# CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2)
+);
+CREATE TABLE
+postgres=# \d products
+                                           Table "public.products"
+    Column    |          Type          | Collation | Nullable |                   Default                    
+--------------+------------------------+-----------+----------+----------------------------------------------
+ product_id   | integer                |           | not null | nextval('products_product_id_seq'::regclass)
+ product_name | character varying(100) |           | not null | 
+ price        | numeric(10,2)          |           |          | 
+Indexes:
+    "products_pkey" PRIMARY KEY, btree (product_id)
+
+postgres=# CREATE TABLE transactions (
+    transaction_id BIGSERIAL PRIMARY KEY,  -- Can handle very large numbers
+    amount DECIMAL(15,2),
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE
+postgres=# \d transactions
+                                                 Table "public.transactions"
+      Column      |            Type             | Collation | Nullable |                       Default                        
+------------------+-----------------------------+-----------+----------+------------------------------------------------------
+ transaction_id   | bigint                      |           | not null | nextval('transactions_transaction_id_seq'::regclass)
+ amount           | numeric(15,2)               |           |          | 
+ transaction_date | timestamp without time zone |           |          | CURRENT_TIMESTAMP
+Indexes:
+    "transactions_pkey" PRIMARY KEY, btree (transaction_id)
+
+postgres=# CREATE TABLE orders (
+    order_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    customer_name VARCHAR(100),
+    order_date DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE
+postgres=# CREATE TABLE customers (
+    customer_id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    customer_name VARCHAR(100),
+    email VARCHAR(150)
+);
+CREATE TABLE
+postgres=# INSERT INTO customers (customer_id, customer_name, email) 
+VALUES (1000, 'VIP Customer', 'vip@example.com');
+INSERT 0 1
+postgres=# \d customers
+                                     Table "public.customers"
+    Column     |          Type          | Collation | Nullable |             Default              
+---------------+------------------------+-----------+----------+----------------------------------
+ customer_id   | integer                |           | not null | generated by default as identity
+ customer_name | character varying(100) |           |          | 
+ email         | character varying(150) |           |          | 
+Indexes:
+    "customers_pkey" PRIMARY KEY, btree (customer_id)
+
+postgres=# CREATE TABLE departments (
+    dept_id INTEGER PRIMARY KEY,
+    dept_name VARCHAR(100)
+);
+CREATE TABLE
+postgres=# INSERT INTO departments VALUES (1, 'Computer Science');
+INSERT INTO departments VALUES (1, 'Mathematics');
+INSERT 0 1
+ERROR:  duplicate key value violates unique constraint "departments_pkey"
+DETAIL:  Key (dept_id)=(1) already exists.
+postgres=# INSERT INTO departments VALUES (NULL, 'Physics');
+ERROR:  null value in column "dept_id" of relation "departments" violates not-null constraint
+DETAIL:  Failing row contains (null, Physics).
+postgres=# \q
