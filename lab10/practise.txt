@@ -1,0 +1,32 @@
+postgres=# \d
+                  List of relations
+ Schema |         Name          |   Type   |  Owner   
+--------+-----------------------+----------+----------
+ public | authors               | table    | newowner
+ public | authors_author_id_seq | sequence | newowner
+ public | book_authors          | table    | newowner
+ public | books                 | table    | newowner
+ public | books_book_id_seq     | sequence | newowner
+ public | courses               | table    | newowner
+ public | departments           | table    | newowner
+ public | enrollments           | table    | newowner
+ public | loans                 | table    | newowner
+ public | loans_loan_id_seq     | sequence | newowner
+ public | members               | table    | newowner
+ public | members_member_id_seq | sequence | newowner
+ public | student               | table    | newowner
+ public | student_phones        | table    | newowner
+ public | students              | table    | newowner
+(15 rows)
+
+postgres=# \d students
+                       Table "public.students"
+   Column   |          Type          | Collation | Nullable | Default 
+------------+------------------------+-----------+----------+---------
+ student_id | integer                |           | not null | 
+ name       | character varying(100) |           |          | 
+Indexes:
+    "students_pkey" PRIMARY KEY, btree (student_id)
+Referenced by:
+    TABLE "enrollments" CONSTRAINT "enrollments_student_id_fkey" FOREIGN KEY (student_id) REFERENCES students(student_id)
+    TABLE "student_phones" CONSTRAINT "student_phones_student_id_fkey" FOREIGN KEY (student_id) REFERENCES students(student_id)
