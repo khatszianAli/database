@@ -1,0 +1,204 @@
+postgres=# \dt
+             List of relations
+ Schema |      Name      | Type  |  Owner   
+--------+----------------+-------+----------
+ public | authors        | table | newowner
+ public | book_authors   | table | newowner
+ public | books          | table | newowner
+ public | courses        | table | newowner
+ public | departments    | table | newowner
+ public | enrollments    | table | newowner
+ public | loans          | table | newowner
+ public | members        | table | newowner
+ public | student        | table | newowner
+ public | student_phones | table | newowner
+ public | students       | table | newowner
+(11 rows)
+
+postgres=# SELECT * FROM students;
+ student_id | name 
+------------+------
+(0 rows)
+
+postgres=# SELECT course_name, course_id FROM courses;
+ course_name | course_id 
+-------------+-----------
+(0 rows)
+
+postgres=# CREATE TABLE employees(
+postgres(# name VARCHAR(50) NOT NULL,
+postgres(# deportament VARHCAR(100) NOT NULL,
+postgres(# salary INTEGER NOT NULL
+postgres(# );
+ERROR:  type "varhcar" does not exist
+LINE 3: deportament VARHCAR(100) NOT NULL,
+                    ^
+postgres=# CREATE TABLE employees(
+name VARCHAR(50) NOT NULL,
+deportament VARCHAR(100) NOT NULL,
+salary INTEGER NOT NULL
+);
+CREATE TABLE
+postgres=# INSERT INFO employees (name, deportament, salary) 
+postgres-# VALUES('Aktan', 'Engineering', 100000)
+postgres-# VALUES('Ikbol', 'Engineering', 100000)
+postgres-# VALUES('Arlen', 'AMI', 100000)
+postgres-# VALUES('Kutukbek', 'Sales', 130000)
+postgres-# VALUES('Bektur', 'Sales', 150000)
+postgres-# VALUES('Kumar', 'Sales', 60000);
+ERROR:  syntax error at or near "INFO"
+LINE 1: INSERT INFO employees (name, deportament, salary) 
+               ^
+postgres=# INSERT INTO employees (name, deportament, salary) 
+VALUES('Aktan', 'Engineering', 100000),
+VALUES('Ikbol', 'Engineering', 100000),
+VALUES('Arlen', 'AMI', 100000),
+VALUES('Kutukbek', 'Sales', 130000),
+VALUES('Bektur', 'Sales', 150000),
+VALUES('Kumar', 'Sales', 60000);
+ERROR:  syntax error at or near "VALUES"
+LINE 3: VALUES('Ikbol', 'Engineering', 100000),
+        ^
+postgres=# INSERT INTO employees (name, deportament, salary) 
+VALUES('Aktan', 'Engineering', 100000),
+('Ikbol', 'Engineering', 100000),
+('Arlen', 'AMI', 100000),
+('Kutukbek', 'Sales', 130000),
+('Bektur', 'Sales', 150000),
+('Kumar', 'Sales', 60000);
+INSERT 0 6
+postgres=# SELECT name, salary
+FROM employees
+WHERE department = 'Sales';
+ERROR:  column "department" does not exist
+LINE 3: WHERE department = 'Sales';
+              ^
+HINT:  Perhaps you meant to reference the column "employees.deportament".
+postgres=# SELECT name, salary
+FROM employees
+WHERE deportament = 'Sales';
+   name   | salary 
+----------+--------
+ Kutukbek | 130000
+ Bektur   | 150000
+ Kumar    |  60000
+(3 rows)
+
+postgres=# SELECT name
+FROM employees
+WHERE salary > 75000 AND deportament = 'Engineering';
+ name  
+-------
+ Aktan
+ Ikbol
+(2 rows)
+
+postgres=# SELECT name
+FROM employees
+WHERE name LIKE 'A%';
+ name  
+-------
+ Aktan
+ Arlen
+(2 rows)
+
+postgres=# SELECT deportament
+FROM employees
+postgres=# SELECT name
+FROM employees
+WHERE name ~ '^[AB]';
+  name  
+--------
+ Aktan
+ Arlen
+ Bektur
+(3 rows)
+
+postgres=# SELECT deportament
+FROM employees
+postgres=# SELECT deportament
+FROM employees
+postgres=# SELECT deportament
+FROM employees
+postgres=# SELECT deportament
+FROM employees
+postgres=# SELECT name
+FROM employees
+WHERE salary IN (SELECT sales WHERE amount > 100000);
+ERROR:  column "sales" does not exist
+LINE 3: WHERE salary IN (SELECT sales WHERE amount > 100000);
+                                ^
+postgres=# SELECT name
+FROM employees
+postgres=# SELECT name
+FROM employees
+WHERE salary IN (100000, 130000);
+   name   
+----------
+ Aktan
+ Ikbol
+ Arlen
+ Kutukbek
+(4 rows)
+
+postgres=# SELECT name
+FROM employees e
+postgres=# SELECT name
+FROM employees e
+WHERE EXISTS (
+  SELECT 1     
+  WHERE e.salary > 100000
+);
+   name   
+----------
+ Kutukbek
+ Bektur
+(2 rows)
+
+postgres=# SELECT name, salary,
+  CASE
+    WHEN salary > 100000 THEN 'Senior'
+    WHEN salary BETWEEN 60000 AND 100000 THEN 'Mid-Level'
+    ELSE 'Junior'
+postgres=# SELECT name, salary,
+  CASE
+    WHEN salary > 100000 THEN 'Senior'
+    WHEN salary BETWEEN 60000 AND 100000 THEN 'Mid-Level'
+    ELSE 'Junior'
+  END AS employee_level
+FROM employees;
+   name   | salary | employee_level 
+----------+--------+----------------
+ Aktan    | 100000 | Mid-Level
+ Ikbol    | 100000 | Mid-Level
+ Arlen    | 100000 | Mid-Level
+ Kutukbek | 130000 | Senior
+ Bektur   | 150000 | Senior
+ Kumar    |  60000 | Mid-Level
+(6 rows)
+
+postgres=# WITH department_averages AS (
+  SELECT
+postgres=# WITH department_averages AS (
+  SELECT
+    deportament,
+    AVG(salary) AS avg_salary
+  FROM employees
+  GROUP BY deportament
+)
+
+SELECT
+  e.name,
+  e.salary,
+  e.deportament
+FROM employees e
+JOIN department_averages da ON e.deportament = da.deportament
+WHERE e.salary > da.avg_salary;
+   name   | salary | deportament 
+----------+--------+-------------
+ Kutukbek | 130000 | Sales
+ Bektur   | 150000 | Sales
+(2 rows)
+
+postgres=# 
+
