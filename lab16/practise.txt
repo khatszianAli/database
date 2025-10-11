@@ -1,0 +1,206 @@
+postgres=# BEGIN;
+
+SELECT balance FROM accounts WHERE account_id = 1;
+                                                  
+UPDATE accounts SET balance = balance - 500 WHERE account_id = 1;
+UPDATE accounts SET balance = balance + 500 WHERE account_id = 2;
+COMMIT;
+BEGIN
+ balance 
+---------
+  900.00
+(1 row)
+
+UPDATE 1
+UPDATE 1
+COMMIT
+postgres=# BEGIN;
+INSERT INTO orders (customer_id, total) VALUES (1, 250.00);
+INSERT INTO order_items (order_id, product_id, quantity) VALUES (1, 101, 2);
+UPDATE inventory SET stock = stock - 2 WHERE product_id = 101;
+BEGIN
+INSERT 0 1
+INSERT 0 1
+UPDATE 0
+postgres=*# BEGIN;
+INSERT INTO customers (name, email) VALUES ('John Doe', 'john@email.com');
+INSERT INTO orders (customer_id, total) VALUES (LASTVAL(), 100.00);
+COMMIT;
+WARNING:  there is already a transaction in progress
+BEGIN
+INSERT 0 1
+INSERT 0 1
+COMMIT
+postgres=# COMMIT;
+WARNING:  there is no transaction in progress
+COMMIT
+postgres=# BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+SELECT * FROM accounts;                               
+COMMIT;
+BEGIN
+ account_id | customer_name | balance 
+------------+---------------+---------
+          3 | Zara          |  300.00
+          1 | Ali           |  400.00
+          2 | Sam           | 1100.00
+(3 rows)
+
+COMMIT
+postgres=# BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SELECT * FROM accounts WHERE balance > 1000;
+SELECT * FROM accounts WHERE balance > 1000; 
+COMMIT;
+BEGIN
+ account_id | customer_name | balance 
+------------+---------------+---------
+          2 | Sam           | 1100.00
+(1 row)
+
+ account_id | customer_name | balance 
+------------+---------------+---------
+          2 | Sam           | 1100.00
+(1 row)
+
+COMMIT
+postgres=# BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+SELECT * FROM accounts WHERE balance > 1000;
+SELECT * FROM accounts WHERE balance > 1000;                                  
+COMMIT;
+BEGIN
+ account_id | customer_name | balance 
+------------+---------------+---------
+          2 | Sam           | 1100.00
+(1 row)
+
+ account_id | customer_name | balance 
+------------+---------------+---------
+          2 | Sam           | 1100.00
+(1 row)
+
+COMMIT
+postgres=# BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SELECT * FROM accounts;
+UPDATE accounts SET balance = balance * 1.05;               
+COMMIT;
+BEGIN
+ account_id | customer_name | balance 
+------------+---------------+---------
+          3 | Zara          |  300.00
+          1 | Ali           |  400.00
+          2 | Sam           | 1100.00
+(3 rows)
+
+UPDATE 3
+COMMIT
+postgres=# SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+WARNING:  SET TRANSACTION can only be used in transaction blocks
+SET
+postgres=# BEGIN;
+
+INSERT INTO customers (name, email) VALUES ('Alice', 'alice@email.com');
+
+SAVEPOINT after_customer_insert;
+
+INSERT INTO orders (customer_id, total) VALUES (1, 500.00);
+
+-- Something went wrong with the order, rollback to savepoint
+ROLLBACK TO SAVEPOINT after_customer_insert;
+
+-- Customer insert is still there, but order insert is undone
+INSERT INTO orders (customer_id, total) VALUES (1, 300.00);
+
+COMMIT;
+BEGIN
+INSERT 0 1
+SAVEPOINT
+INSERT 0 1
+ROLLBACK
+INSERT 0 1
+COMMIT
+postgres=# BEGIN;
+
+INSERT INTO products (name, price) VALUES ('Laptop', 999.99);
+SAVEPOINT sp1;
+
+INSERT INTO products (name, price) VALUES ('Mouse', 25.99);
+SAVEPOINT sp2;
+
+INSERT INTO products (name, price) VALUES ('Invalid Product', -50.00);
+-- This violates business rules
+
+ROLLBACK TO SAVEPOINT sp2; -- Removes invalid product insert
+-- Laptop and Mouse inserts are still active
+
+INSERT INTO products (name, price) VALUES ('Keyboard', 79.99);
+
+COMMIT;
+BEGIN
+INSERT 0 1
+SAVEPOINT
+INSERT 0 1
+SAVEPOINT
+INSERT 0 1
+ROLLBACK
+INSERT 0 1
+COMMIT
+postgres=# BEGIN;
+INSERT INTO logs (message) VALUES ('Starting process');
+SAVEPOINT process_start;
+
+-- Do some work
+INSERT INTO logs (message) VALUES ('Process completed');
+BEGIN
+INSERT 0 1
+SAVEPOINT
+INSERT 0 1
+postgres=*# RELEASE SAVEPOINT process_start;
+
+COMMIT;
+RELEASE
+COMMIT
+postgres=# BEGIN;
+DO $$
+DECLARE
+    insufficient_funds EXCEPTION;
+    current_balance DECIMAL;
+BEGIN
+    SELECT balance INTO current_balance FROM accounts WHERE account_id = 1;
+    
+    IF current_balance < 100 THEN
+        RAISE insufficient_funds;
+    END IF;
+    
+    UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;
+    UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;
+    
+EXCEPTION
+    WHEN insufficient_funds THEN
+        RAISE NOTICE 'Transaction failed: Insufficient funds';
+        ROLLBACK;
+END $$;
+BEGIN
+ERROR:  type "exception" does not exist
+LINE 3:     insufficient_funds EXCEPTION;
+                               ^
+postgres=!# BEGIN;
+
+-- Main operation
+INSERT INTO orders (customer_id, total) VALUES (1, 1000.00);
+
+SAVEPOINT before_items;
+
+-- Add items (might fail for some items)
+INSERT INTO order_items (order_id, product_id, quantity) 
+VALUES (currval('orders_id_seq'), 101, 2);
+
+-- If this fails, rollback to savepoint and continue
+INSERT INTO order_items (order_id, product_id, quantity) 
+VALUES (currval('orders_id_seq'), 102, 1);
+
+COMMIT;
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+ROLLBACK
