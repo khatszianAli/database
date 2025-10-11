@@ -1,0 +1,212 @@
+postgres=# \dt
+             List of relations
+ Schema |      Name      | Type  |  Owner   
+--------+----------------+-------+----------
+ public | authors        | table | newowner
+ public | book_authors   | table | newowner
+ public | books          | table | newowner
+ public | courses        | table | newowner
+ public | departments    | table | newowner
+ public | employees      | table | newowner
+ public | enrollments    | table | newowner
+ public | loans          | table | newowner
+ public | members        | table | newowner
+ public | student        | table | newowner
+ public | student_phones | table | newowner
+ public | students       | table | newowner
+(12 rows)
+
+postgres=# SELECT COUNT(*) AS total_employees 
+FROM employees;
+ total_employees 
+-----------------
+               6
+(1 row)
+
+postgres=# SELECT COUNT(DISTINCT department) AS unique_departments 
+FROM employees;
+ERROR:  column "department" does not exist
+LINE 1: SELECT COUNT(DISTINCT department) AS unique_departments 
+                              ^
+HINT:  Perhaps you meant to reference the column "employees.deportament".
+postgres=# SELECT COUNT(DISTINCT deportament) AS unique_departments 
+FROM employees;
+ unique_departments 
+--------------------
+                  3
+(1 row)
+
+postgres=# SELECT SUM(salary) AS total_salaries 
+FROM employees;
+ total_salaries 
+----------------
+         640000
+(1 row)
+
+postgres=# SELECT department, SUM(sales_amount) AS total_sales
+FROM sales_data
+postgres=# SELECT AVG(salary) AS average_salary 
+FROM employees;
+   average_salary    
+---------------------
+ 106666.666666666667
+(1 row)
+
+postgres=# SELECT 
+    MAX(salary) AS highest_salary,
+    MIN(salary) AS lowest_salary
+FROM employees;
+ highest_salary | lowest_salary 
+----------------+---------------
+         150000 |         60000
+(1 row)
+
+postgres=# SELECT deportament, STRING_AGG(name, ', ') AS employee_names
+FROM employees
+GROUP BY deportament;
+ deportament |     employee_names      
+-------------+-------------------------
+ Engineering | Aktan, Ikbol
+ Sales       | Kutukbek, Bektur, Kumar
+ AMI         | Arlen
+(3 rows)
+
+postgres=# SELECT department, ARRAY_AGG(salary) AS salary_array
+FROM employees
+postgres=# SELECT deportament, ARRAY_AGG(salary) AS salary_array
+FROM employees
+GROUP BY deportament;
+ deportament |     salary_array      
+-------------+-----------------------
+ Engineering | {100000,100000}
+ Sales       | {130000,150000,60000}
+ AMI         | {100000}
+(3 rows)
+
+postgres=# SELECT deportament, ARRAY_AGG(name ORDERED BY salary) AS salary_array
+              
+FROM employees
+GROUP BY deportament;
+ERROR:  syntax error at or near "ORDERED"
+LINE 1: SELECT deportament, ARRAY_AGG(name ORDERED BY salary) AS sal...
+                                           ^
+postgres=# SELECT deportament, ARRAY_AGG(name ORDER BY salary) AS salary_array
+FROM employees
+GROUP BY deportament;
+ deportament |      salary_array       
+-------------+-------------------------
+ AMI         | {Arlen}
+ Engineering | {Aktan,Ikbol}
+ Sales       | {Kumar,Kutukbek,Bektur}
+(3 rows)
+
+postgres=# SELECT 
+    department,
+    STDDEV(salary) AS salary_std_dev,
+    VARIANCE(salary) AS salary_variance
+FROM employees
+postgres=# SELECT 
+postgres=# SELECT 
+    deportament,
+    STDDEV(salary) AS salary_std_dev,
+    VARIANCE(salary) AS salary_variance
+FROM employees
+postgres=# SELECT 
+    deportament,
+    STDDEV(salary) AS salary_std_dev,
+    VARIANCE(salary) AS salary_variance
+FROM employees
+postgres=# SELECT 
+    deportament,
+    STDDEV(salary) AS salary_std_dev,
+    VARIANCE(salary) AS salary_variance
+FROM employees
+GROUP BY deportament;
+ deportament | salary_std_dev |   salary_variance   
+-------------+----------------+---------------------
+ Engineering |              0 |                   0
+ Sales       | 47258.15626253 | 2233333333.33333333
+ AMI         |                |                    
+(3 rows)
+
+postgres=# SELECT 
+    deportament,
+    COUNT(*) AS employee_count
+FROM employees
+GROUP BY deportament
+HAVING COUNT(*) > 5;
+ deportament | employee_count 
+-------------+----------------
+(0 rows)
+
+postgres=# SELECT 
+    employee_id,
+    first_name,
+postgres=# SELECT 
+    name,       
+    deportament,
+    salary,
+    AVG(salary) OVER (PARTITION BY deportament) AS dept_avg_salary
+FROM employees;
+   name   | deportament | salary |   dept_avg_salary   
+----------+-------------+--------+---------------------
+ Arlen    | AMI         | 100000 | 100000.000000000000
+ Aktan    | Engineering | 100000 | 100000.000000000000
+ Ikbol    | Engineering | 100000 | 100000.000000000000
+ Kutukbek | Sales       | 130000 | 113333.333333333333
+ Bektur   | Sales       | 150000 | 113333.333333333333
+ Kumar    | Sales       |  60000 | 113333.333333333333
+(6 rows)
+
+postgres=# SELECT 
+    deportament,
+    COUNT(*) AS employee_count,
+    MIN(salary) AS min_salary,
+    MAX(salary) AS max_salary,
+    AVG(salary) AS avg_salary,
+    STDDEV(salary) AS salary_std_dev
+FROM employees
+GROUP BY deportament
+ORDER BY avg_salary DESC;
+ deportament | employee_count | min_salary | max_salary |     avg_salary      | salary_std_dev 
+-------------+----------------+------------+------------+---------------------+----------------
+ Sales       |              3 |      60000 |     150000 | 113333.333333333333 | 47258.15626253
+ Engineering |              2 |     100000 |     100000 | 100000.000000000000 |              0
+ AMI         |              1 |     100000 |     100000 | 100000.000000000000 |               
+(3 rows)
+
+postgres=# SELECT 
+    deportament,
+    COUNT(*) AS total_employees,
+    COUNT(CASE WHEN salary > 50000 THEN 1 END) AS high_earners,
+FROM employees                                                          
+GROUP BY deportament;
+ERROR:  syntax error at or near "FROM"
+LINE 5: FROM employees
+        ^
+postgres=# SELECT 
+    deportament,
+    COUNT(*) AS total_employees,
+    COUNT(CASE WHEN salary > 50000 THEN 1 END) AS high_earners 
+FROM employees
+GROUP BY deportament;
+ deportament | total_employees | high_earners 
+-------------+-----------------+--------------
+ Engineering |               2 |            2
+ Sales       |               3 |            3
+ AMI         |               1 |            1
+(3 rows)
+
+postgres=# SELECT 
+    deportament,
+    COUNT(*) AS dept_count,
+    COUNT(*)::FLOAT / (SELECT COUNT(*) FROM employees) * 100 AS percentage
+FROM employees
+GROUP BY deportament
+ORDER BY percentage DESC;
+ deportament | dept_count |     percentage     
+-------------+------------+--------------------
+ Sales       |          3 |                 50
+ Engineering |          2 |  33.33333333333333
+ AMI         |          1 | 16.666666666666664
+(3 rows)
