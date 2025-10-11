@@ -1,0 +1,100 @@
+postgres=# SELECT name, deportament, salary
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary)                                                
+    FROM employees
+);
+   name   | deportament | salary 
+----------+-------------+--------
+ Kutukbek | Sales       | 130000
+ Bektur   | Sales       | 150000
+(2 rows)
+
+postgres=# SELECT
+postgres=# SELECT
+    name,
+    deportament,
+    salary,
+    RANK() OVER (PARTITION BY deportament ORDER BY salary DESC) AS dept_salary_rank
+FROM employees;
+   name   | deportament | salary | dept_salary_rank 
+----------+-------------+--------+------------------
+ Arlen    | AMI         | 100000 |                1
+ Aktan    | Engineering | 100000 |                1
+ Ikbol    | Engineering | 100000 |                1
+ Bektur   | Sales       | 150000 |                1
+ Kutukbek | Sales       | 130000 |                2
+ Kumar    | Sales       |  60000 |                3
+(6 rows)
+
+postgres=# SELECT
+postgres=# SELECT
+    name,
+    SUM(salary) OVER (PARTITION BY deportament) AS total_dept_salary,
+    AVG(salary) FILTER (WHERE salary > 90000) OVER () AS avg_salary_senior
+FROM employees;
+   name   | total_dept_salary |  avg_salary_senior  
+----------+-------------------+---------------------
+ Arlen    |            100000 | 116000.000000000000
+ Aktan    |            200000 | 116000.000000000000
+ Ikbol    |            200000 | 116000.000000000000
+ Kutukbek |            340000 | 116000.000000000000
+ Bektur   |            340000 | 116000.000000000000
+ Kumar    |            340000 | 116000.000000000000
+
+ product_name | year_2022 | year_2023 | year_2024 
+--------------+-----------+-----------+-----------
+ Tablet       |   3000.00 |   3500.00 |   4000.00
+ Phone        |   5000.00 |   7000.00 |   7200.00
+ Laptop       |   8000.00 |   9000.00 |   8500.00
+(3 rows
+
+postgres=# CREATE TABLE pivoted_sales AS
+SELECT
+    product_name,
+    SUM(CASE WHEN year = 2022 THEN sales_amount ELSE 0 END) AS year_2022,
+    SUM(CASE WHEN year = 2023 THEN sales_amount ELSE 0 END) AS year_2023,
+    SUM(CASE WHEN year = 2024 THEN sales_amount ELSE 0 END) AS year_2024
+FROM sales
+GROUP BY product_name;
+SELECT 3
+postgres=# SELECT product_name, '2022' AS year, year_2022 AS sales_amount FROM pivoted_sales
+UNION ALL
+SELECT product_name, '2023' AS year, year_2023 AS sales_amount FROM pivoted_sales
+UNION ALL
+SELECT product_name, '2024' AS year, year_2024 AS sales_amount FROM pivoted_sales
+ORDER BY product_name, year;
+ product_name | year | sales_amount 
+--------------+------+--------------
+ Laptop       | 2022 |      8000.00
+ Laptop       | 2023 |      9000.00
+ Laptop       | 2024 |      8500.00
+ Phone        | 2022 |      5000.00
+ Phone        | 2023 |      7000.00
+ Phone        | 2024 |      7200.00
+ Tablet       | 2022 |      3000.00
+ Tablet       | 2023 |      3500.00
+ Tablet       | 2024 |      4000.00
+(9 rows)
+
+postgres=# SELECT product_name, status
+FROM orders
+ORDER BY
+    CASE status
+        WHEN 'High Priority' THEN 1
+        WHEN 'Medium Priority' THEN 2
+        WHEN 'Low Priority' THEN 3
+        ELSE 4
+    END;
+ product_name |     status      
+--------------+-----------------
+ Monitor      | High Priority
+ Laptop       | High Priority
+ Mouse        | Medium Priority
+ Tablet       | Medium Priority
+ Headphones   | Low Priority
+ Phone        | Low Priority
+ Keyboard     | Pending
+(7 rows)
+
+
