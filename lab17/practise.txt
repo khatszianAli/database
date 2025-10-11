@@ -1,0 +1,545 @@
+postgres=# COPY employees TO '/tmp/employees.txt' 
+WITH DELIMITER '|' NULL 'N/A' CSV HEADER;
+COPY 6
+postgres=# COPY employees(first_name, last_name, email) 
+postgres=# COPY (SELECT * FROM employees WHERE deportament = 'AMI') 
+TO '/tmp/it_employees.csv' WITH CSV HEADER;
+ 
+pg_dump -h localhost -U newowner -d postgres > backup.sql
+newowner@MacBookPro ~ % pg_dump -h localhost -U newowner -d postgres > employees -t deportaments
+pg_dump: error: no matching tables were found
+newowner@MacBookPro ~ % pg_dump -h localhost -U newowner -d postgres > employees               
+newowner@MacBookPro ~ % pg_dump -h localhost -U newowner -d postgres -Fc > backup.dump
+newowner@MacBookPro ~ % pg_restore -h localhost -U newowner -d postgres backup.dump
+pg_restore: while PROCESSING TOC:
+pg_restore: from TOC entry 230; 1259 24973 TABLE accounts newowner
+pg_restore: error: could not execute query: ERROR:  relation "accounts" already exists
+Command was: CREATE TABLE public.accounts (
+    account_id integer NOT NULL,
+    customer_name character varying(50),
+    balance numeric(12,2)
+);
+
+
+pg_restore: from TOC entry 229; 1259 24972 SEQUENCE accounts_account_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "accounts_account_id_seq" already exists
+Command was: CREATE SEQUENCE public.accounts_account_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 218; 1259 24867 TABLE authors newowner
+pg_restore: error: could not execute query: ERROR:  relation "authors" already exists
+Command was: CREATE TABLE public.authors (
+    author_id integer NOT NULL,
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    birth_date date
+);
+
+
+pg_restore: from TOC entry 217; 1259 24866 SEQUENCE authors_author_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "authors_author_id_seq" already exists
+Command was: CREATE SEQUENCE public.authors_author_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 221; 1259 24883 TABLE book_authors newowner
+pg_restore: error: could not execute query: ERROR:  relation "book_authors" already exists
+Command was: CREATE TABLE public.book_authors (
+    book_id integer NOT NULL,
+    author_id integer NOT NULL
+);
+
+
+pg_restore: from TOC entry 220; 1259 24874 TABLE books newowner
+pg_restore: error: could not execute query: ERROR:  relation "books" already exists
+Command was: CREATE TABLE public.books (
+    book_id integer NOT NULL,
+    title character varying(200) NOT NULL,
+    isbn character varying(13),
+    publication_year integer,
+    available_copies integer DEFAULT 1
+);
+
+
+pg_restore: from TOC entry 219; 1259 24873 SEQUENCE books_book_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "books_book_id_seq" already exists
+Command was: CREATE SEQUENCE public.books_book_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 213; 1259 24772 TABLE courses newowner
+pg_restore: error: could not execute query: ERROR:  relation "courses" already exists
+Command was: CREATE TABLE public.courses (
+    course_id integer NOT NULL,
+    course_name character varying(100),
+    credits integer
+);
+
+
+pg_restore: from TOC entry 232; 1259 24980 TABLE customers newowner
+pg_restore: error: could not execute query: ERROR:  relation "customers" already exists
+Command was: CREATE TABLE public.customers (
+    customer_id integer NOT NULL,
+    name character varying(50),
+    email character varying(100)
+);
+
+
+pg_restore: from TOC entry 231; 1259 24979 SEQUENCE customers_customer_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "customers_customer_id_seq" already exists
+Command was: CREATE SEQUENCE public.customers_customer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 215; 1259 24807 TABLE departments newowner
+pg_restore: error: could not execute query: ERROR:  relation "departments" already exists
+Command was: CREATE TABLE public.departments (
+    department_id integer NOT NULL,
+    department_name character varying(100),
+    department_head character varying(100)
+);
+
+
+pg_restore: from TOC entry 226; 1259 24935 TABLE employees newowner
+pg_restore: error: could not execute query: ERROR:  relation "employees" already exists
+Command was: CREATE TABLE public.employees (
+    name character varying(50) NOT NULL,
+    deportament character varying(100) NOT NULL,
+    salary integer NOT NULL
+);
+
+
+pg_restore: from TOC entry 214; 1259 24777 TABLE enrollments newowner
+pg_restore: error: could not execute query: ERROR:  relation "enrollments" already exists
+Command was: CREATE TABLE public.enrollments (
+    student_id integer NOT NULL,
+    course_id integer NOT NULL,
+    grade character(2)
+);
+
+
+pg_restore: from TOC entry 238; 1259 25011 TABLE inventory newowner
+pg_restore: error: could not execute query: ERROR:  relation "inventory" already exists
+Command was: CREATE TABLE public.inventory (
+    product_id integer NOT NULL,
+    product_name character varying(50),
+    stock integer
+);
+
+
+pg_restore: from TOC entry 237; 1259 25010 SEQUENCE inventory_product_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "inventory_product_id_seq" already exists
+Command was: CREATE SEQUENCE public.inventory_product_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 225; 1259 24909 TABLE loans newowner
+pg_restore: error: could not execute query: ERROR:  relation "loans" already exists
+Command was: CREATE TABLE public.loans (
+    loan_id integer NOT NULL,
+    member_id integer NOT NULL,
+    book_id integer NOT NULL,
+    loan_date date DEFAULT CURRENT_DATE,
+    due_date date NOT NULL,
+    return_date date,
+    late_fee numeric(10,2) DEFAULT 0.00
+);
+
+
+pg_restore: from TOC entry 224; 1259 24908 SEQUENCE loans_loan_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "loans_loan_id_seq" already exists
+Command was: CREATE SEQUENCE public.loans_loan_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 242; 1259 25025 TABLE logs newowner
+pg_restore: error: could not execute query: ERROR:  relation "logs" already exists
+Command was: CREATE TABLE public.logs (
+    log_id integer NOT NULL,
+    message text,
+    created_at timestamp without time zone DEFAULT now()
+);
+
+
+pg_restore: from TOC entry 241; 1259 25024 SEQUENCE logs_log_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "logs_log_id_seq" already exists
+Command was: CREATE SEQUENCE public.logs_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 223; 1259 24899 TABLE members newowner
+pg_restore: error: could not execute query: ERROR:  relation "members" already exists
+Command was: CREATE TABLE public.members (
+    member_id integer NOT NULL,
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    email character varying(100) NOT NULL,
+    phone character varying(15),
+    membership_date date DEFAULT CURRENT_DATE
+);
+
+
+pg_restore: from TOC entry 222; 1259 24898 SEQUENCE members_member_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "members_member_id_seq" already exists
+Command was: CREATE SEQUENCE public.members_member_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 236; 1259 24999 TABLE order_items newowner
+pg_restore: error: could not execute query: ERROR:  relation "order_items" already exists
+Command was: CREATE TABLE public.order_items (
+    order_item_id integer NOT NULL,
+    order_id integer,
+    product_id integer,
+    quantity integer
+);
+
+
+pg_restore: from TOC entry 235; 1259 24998 SEQUENCE order_items_order_item_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "order_items_order_item_id_seq" already exists
+Command was: CREATE SEQUENCE public.order_items_order_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 234; 1259 24987 TABLE orders newowner
+pg_restore: error: could not execute query: ERROR:  relation "orders" already exists
+Command was: CREATE TABLE public.orders (
+    order_id integer NOT NULL,
+    customer_id integer,
+    total numeric(10,2)
+);
+
+
+pg_restore: from TOC entry 233; 1259 24986 SEQUENCE orders_order_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "orders_order_id_seq" already exists
+Command was: CREATE SEQUENCE public.orders_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 228; 1259 24960 TABLE pivoted_sales newowner
+pg_restore: error: could not execute query: ERROR:  relation "pivoted_sales" already exists
+Command was: CREATE TABLE public.pivoted_sales (
+    product_name character varying(50),
+    year_2022 numeric,
+    year_2023 numeric,
+    year_2024 numeric
+);
+
+
+pg_restore: from TOC entry 240; 1259 25018 TABLE products newowner
+pg_restore: error: could not execute query: ERROR:  relation "products" already exists
+Command was: CREATE TABLE public.products (
+    product_id integer NOT NULL,
+    name character varying(50),
+    price numeric(10,2)
+);
+
+
+pg_restore: from TOC entry 239; 1259 25017 SEQUENCE products_product_id_seq newowner
+pg_restore: error: could not execute query: ERROR:  relation "products_product_id_seq" already exists
+Command was: CREATE SEQUENCE public.products_product_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+pg_restore: from TOC entry 227; 1259 24957 TABLE sales newowner
+pg_restore: error: could not execute query: ERROR:  relation "sales" already exists
+Command was: CREATE TABLE public.sales (
+    product_name character varying(50),
+    year integer,
+    sales_amount numeric(10,2)
+);
+
+
+pg_restore: from TOC entry 216; 1259 24812 TABLE student newowner
+pg_restore: error: could not execute query: ERROR:  relation "student" already exists
+Command was: CREATE TABLE public.student (
+    student_id integer NOT NULL,
+    name character varying(100),
+    department_id integer
+);
+
+
+pg_restore: from TOC entry 212; 1259 24762 TABLE student_phones newowner
+pg_restore: error: could not execute query: ERROR:  relation "student_phones" already exists
+Command was: CREATE TABLE public.student_phones (
+    student_id integer NOT NULL,
+    phone_number character varying(15) NOT NULL,
+    phone_type character varying(20)
+);
+
+
+pg_restore: from TOC entry 211; 1259 24757 TABLE students newowner
+pg_restore: error: could not execute query: ERROR:  relation "students" already exists
+Command was: CREATE TABLE public.students (
+    student_id integer NOT NULL,
+    name character varying(100)
+);
+
+
+pg_restore: from TOC entry 3844; 0 24973 TABLE DATA accounts newowner
+pg_restore: error: COPY failed for table "accounts": ERROR:  duplicate key value violates unique constraint "accounts_pkey"
+DETAIL:  Key (account_id)=(3) already exists.
+CONTEXT:  COPY accounts, line 1
+pg_restore: from TOC entry 3846; 0 24980 TABLE DATA customers newowner
+pg_restore: error: COPY failed for table "customers": ERROR:  duplicate key value violates unique constraint "customers_pkey"
+DETAIL:  Key (customer_id)=(1) already exists.
+CONTEXT:  COPY customers, line 1
+pg_restore: from TOC entry 3852; 0 25011 TABLE DATA inventory newowner
+pg_restore: error: COPY failed for table "inventory": ERROR:  duplicate key value violates unique constraint "inventory_pkey"
+DETAIL:  Key (product_id)=(1) already exists.
+CONTEXT:  COPY inventory, line 1
+pg_restore: from TOC entry 3856; 0 25025 TABLE DATA logs newowner
+pg_restore: error: COPY failed for table "logs": ERROR:  duplicate key value violates unique constraint "logs_pkey"
+DETAIL:  Key (log_id)=(1) already exists.
+CONTEXT:  COPY logs, line 1
+pg_restore: from TOC entry 3850; 0 24999 TABLE DATA order_items newowner
+pg_restore: error: COPY failed for table "order_items": ERROR:  duplicate key value violates unique constraint "order_items_pkey"
+DETAIL:  Key (order_item_id)=(1) already exists.
+CONTEXT:  COPY order_items, line 1
+pg_restore: from TOC entry 3848; 0 24987 TABLE DATA orders newowner
+pg_restore: error: COPY failed for table "orders": ERROR:  duplicate key value violates unique constraint "orders_pkey"
+DETAIL:  Key (order_id)=(1) already exists.
+CONTEXT:  COPY orders, line 1
+pg_restore: from TOC entry 3854; 0 25018 TABLE DATA products newowner
+pg_restore: error: COPY failed for table "products": ERROR:  duplicate key value violates unique constraint "products_pkey"
+DETAIL:  Key (product_id)=(1) already exists.
+CONTEXT:  COPY products, line 1
+pg_restore: from TOC entry 3663; 2606 24978 CONSTRAINT accounts accounts_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "accounts" are not allowed
+Command was: ALTER TABLE ONLY public.accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (account_id);
+
+
+pg_restore: from TOC entry 3649; 2606 24872 CONSTRAINT authors authors_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "authors" are not allowed
+Command was: ALTER TABLE ONLY public.authors
+    ADD CONSTRAINT authors_pkey PRIMARY KEY (author_id);
+
+
+pg_restore: from TOC entry 3655; 2606 24887 CONSTRAINT book_authors book_authors_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "book_authors" are not allowed
+Command was: ALTER TABLE ONLY public.book_authors
+    ADD CONSTRAINT book_authors_pkey PRIMARY KEY (book_id, author_id);
+
+
+pg_restore: from TOC entry 3651; 2606 24882 CONSTRAINT books books_isbn_key newowner
+pg_restore: error: could not execute query: ERROR:  relation "books_isbn_key" already exists
+Command was: ALTER TABLE ONLY public.books
+    ADD CONSTRAINT books_isbn_key UNIQUE (isbn);
+
+
+pg_restore: from TOC entry 3653; 2606 24880 CONSTRAINT books books_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "books" are not allowed
+Command was: ALTER TABLE ONLY public.books
+    ADD CONSTRAINT books_pkey PRIMARY KEY (book_id);
+
+
+pg_restore: from TOC entry 3641; 2606 24776 CONSTRAINT courses courses_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "courses" are not allowed
+Command was: ALTER TABLE ONLY public.courses
+    ADD CONSTRAINT courses_pkey PRIMARY KEY (course_id);
+
+
+pg_restore: from TOC entry 3665; 2606 24985 CONSTRAINT customers customers_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "customers" are not allowed
+Command was: ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_pkey PRIMARY KEY (customer_id);
+
+
+pg_restore: from TOC entry 3645; 2606 24811 CONSTRAINT departments departments_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "departments" are not allowed
+Command was: ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT departments_pkey PRIMARY KEY (department_id);
+
+
+pg_restore: from TOC entry 3643; 2606 24781 CONSTRAINT enrollments enrollments_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "enrollments" are not allowed
+Command was: ALTER TABLE ONLY public.enrollments
+    ADD CONSTRAINT enrollments_pkey PRIMARY KEY (student_id, course_id);
+
+
+pg_restore: from TOC entry 3671; 2606 25016 CONSTRAINT inventory inventory_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "inventory" are not allowed
+Command was: ALTER TABLE ONLY public.inventory
+    ADD CONSTRAINT inventory_pkey PRIMARY KEY (product_id);
+
+
+pg_restore: from TOC entry 3661; 2606 24916 CONSTRAINT loans loans_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "loans" are not allowed
+Command was: ALTER TABLE ONLY public.loans
+    ADD CONSTRAINT loans_pkey PRIMARY KEY (loan_id);
+
+
+pg_restore: from TOC entry 3675; 2606 25033 CONSTRAINT logs logs_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "logs" are not allowed
+Command was: ALTER TABLE ONLY public.logs
+    ADD CONSTRAINT logs_pkey PRIMARY KEY (log_id);
+
+
+pg_restore: from TOC entry 3657; 2606 24907 CONSTRAINT members members_email_key newowner
+pg_restore: error: could not execute query: ERROR:  relation "members_email_key" already exists
+Command was: ALTER TABLE ONLY public.members
+    ADD CONSTRAINT members_email_key UNIQUE (email);
+
+
+pg_restore: from TOC entry 3659; 2606 24905 CONSTRAINT members members_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "members" are not allowed
+Command was: ALTER TABLE ONLY public.members
+    ADD CONSTRAINT members_pkey PRIMARY KEY (member_id);
+
+
+pg_restore: from TOC entry 3669; 2606 25004 CONSTRAINT order_items order_items_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "order_items" are not allowed
+Command was: ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_pkey PRIMARY KEY (order_item_id);
+
+
+pg_restore: from TOC entry 3667; 2606 24992 CONSTRAINT orders orders_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "orders" are not allowed
+Command was: ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (order_id);
+
+
+pg_restore: from TOC entry 3673; 2606 25023 CONSTRAINT products products_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "products" are not allowed
+Command was: ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (product_id);
+
+
+pg_restore: from TOC entry 3639; 2606 24766 CONSTRAINT student_phones student_phones_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "student_phones" are not allowed
+Command was: ALTER TABLE ONLY public.student_phones
+    ADD CONSTRAINT student_phones_pkey PRIMARY KEY (student_id, phone_number);
+
+
+pg_restore: from TOC entry 3647; 2606 24816 CONSTRAINT student student_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "student" are not allowed
+Command was: ALTER TABLE ONLY public.student
+    ADD CONSTRAINT student_pkey PRIMARY KEY (student_id);
+
+
+pg_restore: from TOC entry 3637; 2606 24761 CONSTRAINT students students_pkey newowner
+pg_restore: error: could not execute query: ERROR:  multiple primary keys for table "students" are not allowed
+Command was: ALTER TABLE ONLY public.students
+    ADD CONSTRAINT students_pkey PRIMARY KEY (student_id);
+
+
+pg_restore: from TOC entry 3681; 2606 24893 FK CONSTRAINT book_authors book_authors_author_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "book_authors_author_id_fkey" for relation "book_authors" already exists
+Command was: ALTER TABLE ONLY public.book_authors
+    ADD CONSTRAINT book_authors_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.authors(author_id);
+
+
+pg_restore: from TOC entry 3680; 2606 24888 FK CONSTRAINT book_authors book_authors_book_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "book_authors_book_id_fkey" for relation "book_authors" already exists
+Command was: ALTER TABLE ONLY public.book_authors
+    ADD CONSTRAINT book_authors_book_id_fkey FOREIGN KEY (book_id) REFERENCES public.books(book_id);
+
+
+pg_restore: from TOC entry 3678; 2606 24787 FK CONSTRAINT enrollments enrollments_course_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "enrollments_course_id_fkey" for relation "enrollments" already exists
+Command was: ALTER TABLE ONLY public.enrollments
+    ADD CONSTRAINT enrollments_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(course_id);
+
+
+pg_restore: from TOC entry 3677; 2606 24782 FK CONSTRAINT enrollments enrollments_student_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "enrollments_student_id_fkey" for relation "enrollments" already exists
+Command was: ALTER TABLE ONLY public.enrollments
+    ADD CONSTRAINT enrollments_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.students(student_id);
+
+
+pg_restore: from TOC entry 3683; 2606 24922 FK CONSTRAINT loans loans_book_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "loans_book_id_fkey" for relation "loans" already exists
+Command was: ALTER TABLE ONLY public.loans
+    ADD CONSTRAINT loans_book_id_fkey FOREIGN KEY (book_id) REFERENCES public.books(book_id);
+
+
+pg_restore: from TOC entry 3682; 2606 24917 FK CONSTRAINT loans loans_member_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "loans_member_id_fkey" for relation "loans" already exists
+Command was: ALTER TABLE ONLY public.loans
+    ADD CONSTRAINT loans_member_id_fkey FOREIGN KEY (member_id) REFERENCES public.members(member_id);
+
+
+pg_restore: from TOC entry 3685; 2606 25005 FK CONSTRAINT order_items order_items_order_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "order_items_order_id_fkey" for relation "order_items" already exists
+Command was: ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(order_id);
+
+
+pg_restore: from TOC entry 3684; 2606 24993 FK CONSTRAINT orders orders_customer_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "orders_customer_id_fkey" for relation "orders" already exists
+Command was: ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_customer_id_fkey FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
+
+
+pg_restore: from TOC entry 3679; 2606 24817 FK CONSTRAINT student student_department_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "student_department_id_fkey" for relation "student" already exists
+Command was: ALTER TABLE ONLY public.student
+    ADD CONSTRAINT student_department_id_fkey FOREIGN KEY (department_id) REFERENCES public.departments(department_id);
+
+
+pg_restore: from TOC entry 3676; 2606 24767 FK CONSTRAINT student_phones student_phones_student_id_fkey newowner
+pg_restore: error: could not execute query: ERROR:  constraint "student_phones_student_id_fkey" for relation "student_phones" already exists
+Command was: ALTER TABLE ONLY public.student_phones
+    ADD CONSTRAINT student_phones_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.students(student_id);
+
+
+pg_restore: warning: errors ignored on restore: 69
+newowner@MacBookPro ~ % 
+
