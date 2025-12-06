@@ -16,6 +16,18 @@ A database schema for a **Learning Management System (LMS)** — designed for ma
 
 ---
 
+### Features
+- Student management
+- Instructor management
+- Course management
+- Enrollment tracking
+- Assignment creation
+- Submission tracking
+- Grade management
+- Indexed columns for performance
+- Transaction support
+- Backup and restore support
+
 ## Setup & Installation
 
 ### Requirements
