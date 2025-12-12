@@ -41,11 +41,11 @@ VALUES
 (3, 'Homework', '2025-12-05 23:59:00', 100),
 (4, 'Presentation', '2025-12-03 23:59:00', 100),  
 (5, 'Group assignment', '2025-12-05 23:59:00', 100),
-(1, 'Final Project', '2025-12-14 23:59:00', 100),  
+(1, 'Final Project', '2025-12-14 23:59:00', 100);  
 
 INSERT INTO submission (assignment_id, student_id, obtained_mark)
 VALUES
 (1, 1, 95),
 (1, 2, 95),
 (3, 4, 80),
-(5, 2, 67),
+(5, 2, 67);
