@@ -1,7 +1,7 @@
-CREATE DATABASE lms_db;
-\c lms_db;
+CREATE DATABASE lms_db; -- Create datebase 
+\c lms_db; 
 
-
+-- Create students
 CREATE TABLE student (
     student_id SERIAL PRIMARY KEY,
     student_name VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE student (
     enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+-- Create instructor
 CREATE TABLE instructor (
     instructor_id SERIAL PRIMARY KEY,
     instructor_name VARCHAR(100) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE instructor (
     department VARCHAR(100)
 );
 
-
+-- Create course
 CREATE TABLE course (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(150) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE course (
         ON DELETE SET NULL
 );
 
-
+-- Create enrollment
 CREATE TABLE enrollment (
     enrollment_id SERIAL PRIMARY KEY,
     student_id INTEGER REFERENCES student(student_id)
@@ -39,7 +39,7 @@ CREATE TABLE enrollment (
     enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+-- Create assignment
 CREATE TABLE assignment (
     assignment_id SERIAL PRIMARY KEY,
     course_id INTEGER REFERENCES course(course_id)
@@ -49,7 +49,7 @@ CREATE TABLE assignment (
     total_mark INTEGER NOT NULL CHECK (total_mark > 0)
 );
 
-
+-- Create submission
 CREATE TABLE submission (
     submission_id SERIAL PRIMARY KEY,
     assignment_id INTEGER REFERENCES assignment(assignment_id)
