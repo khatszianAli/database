@@ -7,14 +7,16 @@ A database schema for a **Learning Management System (LMS)** — designed for ma
 
 | File / Folder | Description |
 |---------------|-------------|
+| `Video.gift` | Video recording of working database. |
 | `ER-diagram.png` | Visual ER diagram of the schema (tables + relationships) for easy understanding. |
-| `README.md` | (This file) Explanation of project, how to set up and use the database. |
+| `Final Project.pdf` | The presentation of Final project. |
+| `README.md` | Explanation of project, how to set up and use the database. |
 | `queries/`| Example SQL queries: basic retrievals, advanced reporting, statistics, etc. |
 | `data_insertion`  | Example data insertion statements — sample students, instructors, courses, enrollments, assignments and submissions. |
 | `lms_database` | Main script that defines all tables, relationships, constraints, and indexing. |
 | `indexing ` | Demostration of indexing. |
 | `transactions ` | Demostration of transactions. |
-
+| `Stepik` | Image of finished Stepik course. |
 ---
 
 ### Features
