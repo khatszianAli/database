@@ -1,6 +1,7 @@
 # LMS Database Project 
 
 A database schema for a **Learning Management System (LMS)** — designed for managing students, instructors, courses, enrollments, assignments, and submissions. Implemented in PostgreSQL, with full schema definition, sample data, and example queries written by Ali Khantszian(ka12438) for the final project of course Database.
+<img src="https://github.com/khatszianAli/database/blob/main/final_project/2025-12-1216.55.03-ezgif.com-video-to-gif-converter.gif" width="700">
 
 ## Stucture
 
